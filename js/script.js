@@ -164,9 +164,40 @@ $('.activities').on('click', 'input', function(event) {
 });
 
 
+/* PAYMENT INFO SECTION */
 
+// I set the default view of the payment info section
+// by hiding and showing elements that represent different payment methods
+$('#payment').val('credit card');
 
+$('#credit-card').show();
+$('#paypal').hide();
+$('#bitcoin').hide();
+$("#payment option[value='select_method']").attr('disabled', true);
 
+// the 'change' method on '#payment' allow me to listen for any changes in value of the select element.
+// I dispay and/or hide the divs containing the different payment info depending on the selected payment option.
+$('#payment').change(function() {
+
+  if($('#payment').val() === 'credit card') {
+     $('#credit-card').show();
+     $('#paypal').hide();
+     $('#bitcoin').hide();
+  }
+
+  else if($('#payment').val() === 'paypal') {
+     $('#credit-card').hide();
+     $('#paypal').show();
+     $('#bitcoin').hide();
+  }
+
+  else if($('#payment').val() === 'bitcoin') {
+     $('#credit-card').hide();
+     $('#paypal').hide();
+     $('#bitcoin').show();
+  }
+
+});
 
 
 
