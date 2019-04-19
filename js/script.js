@@ -54,6 +54,11 @@ $(document).ready(() => {
   });
 
 
+// ( PROBABLY BRING THOSE VARIABLES UP LATER )
+
+// variable that will hold a boolian value (true = we have at least 1 activity checked)
+let checked_boxes;
+
 // I select 4 inputs inside the fieldset '.activities'
 // which I will pass as arguments for the 'checkbox_relation' function.
 const $js_frameworks = $(".activities input[name='js-frameworks']");
@@ -158,8 +163,10 @@ $('.activities').on('click', 'input', function(event) {
   if(total !== 0) {
     $('#total').remove();
     $('.activities').append("<p id='total'>Total: $" + total + "</p>");
+    checked_boxes = true;
   }else{
     $('#total').remove();
+    checked_boxes = false;
   }
 });
 
@@ -183,6 +190,12 @@ $('#payment').change(function() {
      $('#credit-card').show();
      $('#paypal').hide();
      $('#bitcoin').hide();
+
+  // the following remove any error messages if any
+     $('#credit-card').find('.error-span').hide();
+     $('#cc-num').removeClass('error-border').val('');
+     $('#zip').removeClass('error-border').val('');
+     $('#cvv').removeClass('error-border').val('');
   }
 
   else if($('#payment').val() === 'paypal') {
@@ -198,6 +211,115 @@ $('#payment').change(function() {
   }
 
 });
+
+
+
+// this function checks if the value of an element contains only numbers.
+// we will use this function to check if the user has typed only numbers in
+// the card number and zip code fields when registering using the credit card payment option.
+const checkIfNum = (element) => {
+  const element_value = element.val();
+  return /^\d+$/.test(element_value);
+}
+
+
+
+
+$('button').on('click', function(e) {
+   e.preventDefault();
+
+// name  ( I WANT TO MAKE THE ERROR GONE WHEN USER START TYPING BACK )
+  if($('#name').val() === '') {
+  //  console.log('name field is empty');
+    $('#name').next().show();
+    $('#name').addClass('error-border');
+  }else{
+      $('#name').next().hide();
+      $('#name').removeClass('error-border');
+  }
+
+// email
+  const email_input = /^[^@]+@[^@.]+\.[a-z]+$/i.test($('#mail').val());
+
+  if(!email_input) {
+  //   console.log('email not good');
+    $('#mail').next().show();
+    $('#mail').addClass('error-border');
+  }else{
+      $('#mail').next().hide();
+      $('#mail').removeClass('error-border');
+  }
+
+// checkbox
+  if(!checked_boxes) {
+//     console.log('check at least one activity');
+     $('.activities').find('.error-span').show();
+  }else{
+     $('.activities').find('.error-span').hide();
+  }
+
+// credit card payment
+  if($('#payment').val() === 'credit card') {
+
+    // holds the value of the card number input field
+    const $card_num = $('#cc-num').val();
+    // holds the value of the zip code input field
+    const $card_zip = $('#zip').val();
+    // holds the value of the CVV input field
+    const $cvv = $('#cvv').val();
+
+    // the 'checkIfNum' function is called as the first condition of the following if statements.
+    // we pass the relevant input element as argument to check if the user has typed only numbers in the field.
+
+    if (!checkIfNum($('#cc-num')) || !($card_num.length >= 13 && $card_num.length <= 16)) {
+      console.log('no valid card number');
+       $('#credit-card').find('.error-span').show();
+       $('#cc-num').addClass('error-border');
+    }else{
+       $('#credit-card').find('.error-span').hide();
+       $('#cc-num').removeClass('error-border');
+    }
+
+    if(!checkIfNum($('#zip')) || $card_zip.length !== 6) {
+    // console.log('no valid zip number');
+       $('#credit-card').find('.error-span').show();
+       $('#zip').addClass('error-border');
+    }else{
+       $('#credit-card').find('.error-span').hide();
+       $('#zip').removeClass('error-border');
+    }
+
+    if(!checkIfNum($('#cvv')) || $cvv.length !== 3) {
+    // console.log('no valid CVV');
+       $('#credit-card').find('.error-span').show();
+       $('#cvv').addClass('error-border');
+    }else{
+       $('#credit-card').find('.error-span').hide();
+       $('#cvv').removeClass('error-border');
+    }
+
+
+
+  }
+
+
+});  // end of click event
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

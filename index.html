@@ -21,11 +21,17 @@
       <fieldset>
         <legend>Basic Info</legend>
 
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="user_name">
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="user_name">
+          <span class='error-span'>Type your name</span>
+        </div>
 
-        <label for="mail">Email:</label>
-        <input type="email" id="mail" name="user_email">
+        <div>
+         <label for="mail">Email:</label>
+         <input type="email" id="mail" name="user_email">
+         <span class='error-span'>Type a valid email address</span>
+        </div>
 
         <label for="title">Job Role</label>
         <select id="title" name="user_title">
@@ -76,6 +82,8 @@
 
       <fieldset class="activities">
         <legend>Register for Activities</legend>
+        <div><span class='error-span'>Check at least one activity</span></div>
+
         <label><input type="checkbox" name="all"> Main Conference — $200</label>
         <label><input type="checkbox" name="js-frameworks"> JavaScript Frameworks Workshop — Tuesday 9am-12pm, $100</label>
         <label><input type="checkbox" name="js-libs"> JavaScript Libraries Workshop — Tuesday 1pm-4pm, $100</label>
@@ -85,6 +93,8 @@
         <label><input type="checkbox" name="npm"> npm Workshop — Wednesday 1pm-4pm, $100</label>
 
       </fieldset>
+
+
       <fieldset>
         <legend>Payment Info</legend>
 
@@ -97,7 +107,7 @@
         </select>
 
         <div id="credit-card" class="credit-card">
-
+          <div><span class='error-span'>Card details incorrect</span></div>
           <div class="col-6 col">
             <label for="cc-num">Card Number:</label>
         	  <input id="cc-num" name="user_cc-num" type="text">
