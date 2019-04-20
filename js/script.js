@@ -35,21 +35,29 @@ $(document).ready(() => {
 // 1) remove all current options 2) add the right array of options
   $('#design').change(function(){
 
+// if(!($(this).val() === 'js puns') && !($(this).val() === 'js puns')) {
+//   console.log('yeyeye');
+// }
+
     if($(this).val() === 'js puns') {
-      $("#color").children().remove();
-      $("#color").append(js_puns);
-      $('#color').val(js_puns[0].val());
+       $('#colors-js-puns').show();
+       $("#color").children().remove();
+       $("#color").append(js_puns);
+       $('#color').val(js_puns[0].val());
     }
     else if($(this).val() === 'heart js') {
+        $('#colors-js-puns').show();
         $("#color").children().remove();
         $("#color").append(heart_js);
         $('#color').val(heart_js[0].val());
     }
     else{
-        $("#color").children().remove();
-        const allColors = js_puns.concat(heart_js);
-        $("#color").append(allColors);
-        $('#color').val(allColors[0].val());
+   // ( the commented lines used to concat and show all colors, probably no need for that anoymore )
+        // $("#color").children().remove();
+        // const allColors = js_puns.concat(heart_js);
+        // $("#color").append(allColors);
+        // $('#color').val(allColors[0].val());
+        $('#colors-js-puns').hide();
     }
   });
 
@@ -275,6 +283,9 @@ $('button').on('click', function(e) {
       console.log('no valid card number');
        $('#credit-card').find('.error-span').show();
        $('#cc-num').addClass('error-border');
+
+    // write a conditional error message when the card number is wrong
+
     }else{
        $('#credit-card').find('.error-span').hide();
        $('#cc-num').removeClass('error-border');
@@ -304,9 +315,6 @@ $('button').on('click', function(e) {
 
 
 });  // end of click event
-
-
-
 
 
 
