@@ -1,5 +1,4 @@
 
-
 $(document).ready(() => {
 
 // give focus to the name text field
@@ -34,10 +33,6 @@ $(document).ready(() => {
 // the approach of all conditions is:
 // 1) remove all current options 2) add the right array of options
   $('#design').change(function(){
-
-// if(!($(this).val() === 'js puns') && !($(this).val() === 'js puns')) {
-//   console.log('yeyeye');
-// }
 
     if($(this).val() === 'js puns') {
        $('#colors-js-puns').show();
@@ -179,7 +174,7 @@ $('.activities').on('click', 'input', function(event) {
 });
 
 
-/* PAYMENT INFO SECTION */
+/***** PAYMENT INFO SECTION *****/
 
 // I set the default view of the payment info section
 // by hiding and showing elements that represent different payment methods
@@ -200,7 +195,11 @@ $('#payment').change(function() {
      $('#bitcoin').hide();
 
   // the following remove any error messages if any
-     $('#credit-card').find('.error-span').hide();
+     $('#credit-card').find('#error-card').hide();
+     $('#credit-card').find('#error-card-num').hide();
+     $('#credit-card').find('#error-card-zip').hide();
+     $('#credit-card').find('#error-card-cvv').hide();
+
      $('#cc-num').removeClass('error-border').val('');
      $('#zip').removeClass('error-border').val('');
      $('#cvv').removeClass('error-border').val('');
@@ -232,7 +231,124 @@ const checkIfNum = (element) => {
 
 
 
+// the 'appendError' function append 'error' spans to the page depending on some conditions
+// related to the 3 inputs in the credit card section ( card number, zip code and CVV )
+// since the validation I was testing is almost identical for all 3 inputs I thought I'd write
+// a function to shorten the code.
 
+// it takes 7 parameters ( I know it's not ideal to have that many parameters,
+// but creating this function made the code 60 lines shorter  )
+
+// the parameters are:
+   // - the actual input element
+   // - the value of the input
+   // - the error span related to that specific input ( which is created in the html)
+   // - a first error string
+   // - a second error string
+   // - a third error string
+   // - and finaly an additional condition, which I pass as an argument since it will be different for each inputs.
+   //   an example of what it will be tested in this final condition is:
+   //    - if the number is between 13 and 16 digits long
+   //    - or if the number is a exactly a certain numbers of digits long.
+
+// the condition we are testing are:
+//   if the input is empty
+//   if the input value is a number
+//   and if the number typed in is between/or a certain digit long.
+
+// and depending on the condition we append different strings to the page.
+
+const appendError = (input, input_value, error_span, error1, error2, error3, last_condition ) => {
+
+ // we first test if the input is empty
+  if(input_value === '') {
+
+  // this will clear the span if any strings already appended to it
+     error_span.show().html('');
+  // this will add a red border to the input
+     input.addClass('error-border');
+  // if the span does NOT include our first error string we append it to it
+     if(!error_span.html().includes(error1)) {
+       error_span.append(error1);
+     }
+
+  }else{
+  /* if we got here it means that the input is not empty anymore */
+
+  // we clear our span and add the red border to the input
+     error_span.show().html('');
+     input.addClass('error-border');
+
+  // now we check if the input value is NOT all numbers
+     if(!checkIfNum(input)) {
+  // if the span does NOT include our second error string we append it to it
+       if(!error_span.html().includes(error2)) {
+          error_span.append(error2);
+       }
+
+     }else{
+  /* if we got here it means that the input is not empty and it's only numbers */
+
+  // we clear our span and add the red border to the input
+       error_span.show().html('');
+       input.addClass('error-border');
+
+  // now we check if the last condition is NOT true
+  // the last condition varies depending on which input we're calling the function for
+         if (!last_condition) {
+
+  // if the span does NOT include our third error string we append it to it
+          if(!error_span.html().includes(error3)) {
+            error_span.append(error3);
+           }
+
+         }else{
+  /* at this point the validation is completed and we can clear our error  */
+           input.removeClass('error-border');
+           error_span.hide();
+         }
+     }
+  }
+}
+
+
+//***************************************************************************
+
+/****** adding some keyup event listeners *******/
+
+// email
+$('#mail').keyup(function() {
+
+  const email_input = /^[^@]+@[^@.]+\.[a-z]+$/i.test($('#mail').val());
+
+  if(!email_input) {
+  //   console.log('email not good');
+    $('#mail').next().show();
+    $('#mail').addClass('error-border');
+  }else{
+      $('#mail').next().hide();
+      $('#mail').removeClass('error-border');
+  }
+});
+
+
+// card number
+
+// $('#cc-num').keyup(function() {
+//
+//   appendError( $('#cc-num'), $card_num, $error_span_num,
+//                '- enter a credit card number.',
+//                '- card number can only contain numbers.',
+//                '- enter a number that is between 13 and 16 digits long.',
+//                ($card_num.length >= 13 && $card_num.length <= 16) );
+// });
+
+
+
+//***************************************************************************
+
+
+// click event listener on the 'register' button
 $('button').on('click', function(e) {
    e.preventDefault();
 
@@ -285,6 +401,8 @@ $('button').on('click', function(e) {
     // selects the cvv error span we'll show and hide in the page
     const $error_span_cvv = $('#credit-card').find('#error-card-cvv');
 
+
+
     // the 'checkIfNum' function is called as the first condition of the following if statements.
     // we pass the relevant input element as argument to check if the user has typed only numbers in the field.
 
@@ -298,161 +416,36 @@ $('button').on('click', function(e) {
         $error_span.hide();
     }
 
+//--------------------------------------------------------------------------------------------
 
-    // some conditional errors for the credit card number field
-    if($card_num === '') {
-      // this sets the default error when the input is just empy
-       $error_span_num.show().html('');
-       $('#cc-num').addClass('error-border');
+//-----------------------------------------------------------------------------------------------
 
-       if(!$error_span_num.html().includes('- enter a credit card number.')) {
-         $error_span_num.append('- enter a credit card number.');
-        }
+    // now we call our 'appendError' function passing the relevant arguments
+    // for each of the 3 input fields inside the credit card section (card number, zip code and CVV)
 
-    }else{ // *
-      $error_span_num.html($error_span_num.html().replace('- enter a credit card number.', ''));
-      $('#cc-num').addClass('error-border');
+    appendError( $('#cc-num'), $card_num, $error_span_num,
+                 '- enter a credit card number.',
+                 '- card number can only contain numbers.',
+                 '- enter a number that is between 13 and 16 digits long.',
+                 ($card_num.length >= 13 && $card_num.length <= 16) );
 
-      if(!checkIfNum($('#cc-num'))) {
-         $error_span_num.show().html('');
 
-         if(!$error_span_num.html().includes('- card number can only contain numbers.')) {
-            $error_span_num.append('- card number can only contain numbers.');
-             $('#cc-num').addClass('error-border');
+    appendError( $('#zip'), $card_zip, $error_span_zip,
+                 '- enter a zip code.',
+                 '- zip code can only contain numbers.',
+                 '- zip code is a number of 6 digits.',
+                 ($card_zip.length === 6) );
 
-         }
-      }else{
-         $error_span_num.html($error_span_num.html().replace('- card number can only contain numbers.', ''));
-         $('#cc-num').addClass('error-border');
 
-         if (!($card_num.length >= 13 && $card_num.length <= 16)) {
-            $error_span_num.show().html('');
-
-            if(!$error_span_num.html().includes('- enter a number that is between 13 and 16 digits long.')) {
-               $error_span_num.append('- enter a number that is between 13 and 16 digits long.');
-
-            }
-         }else{
-            $error_span_num.html($error_span_num.html().replace('- enter a number that is between 13 and 16 digits long.', ''));
-            $('#cc-num').removeClass('error-border');
-            $error_span_num.hide();
-         }
-
-      }
-    } // end of first else *
+    appendError( $('#cvv'), $cvv, $error_span_cvv,
+                 '- enter a CVV number.',
+                 '- CVV code can only contain numbers.',
+                 '- CVV code is a number of 3 digits.',
+                 ($cvv.length === 3) );
 
 
 
-
-
-    // some conditional errors for the zip code number field
-    if($card_zip === '') {
-      // this sets the default error when the input is just empy
-       $error_span_zip.show().html('');
-       $('#zip').addClass('error-border');
-
-       if(!$error_span_zip.html().includes('- enter a zip code.')) {
-         $error_span_zip.append('- enter a zip code.');
-        }
-
-    }else{ // *
-      $error_span_zip.html($error_span_zip.html().replace('- enter a zip code.', ''));
-      $('#zip').addClass('error-border');
-
-      if(!checkIfNum($('#zip'))) {
-         $error_span_zip.show().html('');
-
-         if(!$error_span_zip.html().includes('- zip code can only contain numbers.')) {
-            $error_span_zip.append('- zip code can only contain numbers.');
-             $('#zip').addClass('error-border');
-
-         }
-      }else{
-         $error_span_zip.html($error_span_zip.html().replace('- zip code can only contain numbers.', ''));
-         $('#zip').addClass('error-border');
-
-         if ($card_zip.length !== 6) {
-            $error_span_zip.show().html('');
-
-            if(!$error_span_zip.html().includes('- zip code is a number of 6 digits.')) {
-               $error_span_zip.append('- zip code is a number of 6 digits.');
-
-            }
-         }else{
-            $error_span_zip.html($error_span_zip.html().replace('- zip code is a number of 6 digits.', ''));
-            $('#zip').removeClass('error-border');
-            $error_span_zip.hide();
-         }
-
-      }
-    } // end of first else *
-
-
-
-
-
-
-
-
-      // some conditional errors for the cvv number field
-        if($cvv === '') {
-          // this sets the default error when the input is just empy
-           $error_span_cvv.show().html('');
-           $('#cvv').addClass('error-border');
-
-           if(!$error_span_cvv.html().includes('- enter a CVV number.')) {
-             $error_span_cvv.append('- enter a CVV number.');
-            }
-
-        }else{ // *
-          $error_span_cvv.html($error_span_cvv.html().replace('- enter a CVV number.', ''));
-          $('#cvv').addClass('error-border');
-
-          if(!checkIfNum($('#cvv'))) {
-             $error_span_cvv.show().html('');
-
-             if(!$error_span_cvv.html().includes('- CVV code can only contain numbers.')) {
-                $error_span_cvv.append('- CVV code can only contain numbers.');
-                 $('#cvv').addClass('error-border');
-
-             }
-          }else{
-             $error_span_cvv.html($error_span_cvv.html().replace('- CVV code can only contain numbers.', ''));
-             $('#cvv').addClass('error-border');
-
-             if ($cvv.length !== 3) {
-                $error_span_cvv.show().html('');
-
-                if(!$error_span_cvv.html().includes('- CVV code is a number of 3 digits.')) {
-                   $error_span_cvv.append('- CVV code is a number of 3 digits.');
-
-                }
-             }else{
-                $error_span_cvv.html($error_span_cvv.html().replace('- CVV code is a number of 3 digits.', ''));
-                $('#cvv').removeClass('error-border');
-                $error_span_cvv.hide();
-             }
-
-          }
-        } // end of first else *
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
+  }  // if($('#payment').val() === 'credit card')
 
 });  // end of click event
 
@@ -474,3 +467,6 @@ $('button').on('click', function(e) {
 
 
 });
+
+
+// end of everything -------------------------------------------------- test following ---- :::::
