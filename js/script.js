@@ -276,42 +276,182 @@ $('button').on('click', function(e) {
     // holds the value of the CVV input field
     const $cvv = $('#cvv').val();
 
+    // selects the generic error
+    const $error_span = $('#credit-card').find('#error-card');
+    // selects the credit card number error span we'll show and hide in the page
+    const $error_span_num = $('#credit-card').find('#error-card-num');
+    // selects the zip code error span we'll show and hide in the page
+    const $error_span_zip = $('#credit-card').find('#error-card-zip');
+    // selects the cvv error span we'll show and hide in the page
+    const $error_span_cvv = $('#credit-card').find('#error-card-cvv');
+
     // the 'checkIfNum' function is called as the first condition of the following if statements.
     // we pass the relevant input element as argument to check if the user has typed only numbers in the field.
 
-    if (!checkIfNum($('#cc-num')) || !($card_num.length >= 13 && $card_num.length <= 16)) {
-      console.log('no valid card number');
-       $('#credit-card').find('.error-span').show();
+    // if any of this conditions the error message is shown
+    if( (!checkIfNum($('#cc-num')) || !($card_num.length >= 13 && $card_num.length <= 16)) ||
+        (!checkIfNum($('#zip')) || $card_zip.length !== 6) ||
+        (!checkIfNum($('#cvv')) || $cvv.length !== 3) ) {
+
+        $error_span.show();
+    }else {
+        $error_span.hide();
+    }
+
+
+    // some conditional errors for the credit card number field
+    if($card_num === '') {
+      // this sets the default error when the input is just empy
+       $error_span_num.show().html('');
        $('#cc-num').addClass('error-border');
 
-    // write a conditional error message when the card number is wrong
+       if(!$error_span_num.html().includes('- enter a credit card number.')) {
+         $error_span_num.append('- enter a credit card number.');
+        }
 
-    }else{
-       $('#credit-card').find('.error-span').hide();
-       $('#cc-num').removeClass('error-border');
-    }
+    }else{ // *
+      $error_span_num.html($error_span_num.html().replace('- enter a credit card number.', ''));
+      $('#cc-num').addClass('error-border');
 
-    if(!checkIfNum($('#zip')) || $card_zip.length !== 6) {
-    // console.log('no valid zip number');
-       $('#credit-card').find('.error-span').show();
+      if(!checkIfNum($('#cc-num'))) {
+         $error_span_num.show().html('');
+
+         if(!$error_span_num.html().includes('- card number can only contain numbers.')) {
+            $error_span_num.append('- card number can only contain numbers.');
+             $('#cc-num').addClass('error-border');
+
+         }
+      }else{
+         $error_span_num.html($error_span_num.html().replace('- card number can only contain numbers.', ''));
+         $('#cc-num').addClass('error-border');
+
+         if (!($card_num.length >= 13 && $card_num.length <= 16)) {
+            $error_span_num.show().html('');
+
+            if(!$error_span_num.html().includes('- enter a number that is between 13 and 16 digits long.')) {
+               $error_span_num.append('- enter a number that is between 13 and 16 digits long.');
+
+            }
+         }else{
+            $error_span_num.html($error_span_num.html().replace('- enter a number that is between 13 and 16 digits long.', ''));
+            $('#cc-num').removeClass('error-border');
+            $error_span_num.hide();
+         }
+
+      }
+    } // end of first else *
+
+
+
+
+
+    // some conditional errors for the zip code number field
+    if($card_zip === '') {
+      // this sets the default error when the input is just empy
+       $error_span_zip.show().html('');
        $('#zip').addClass('error-border');
-    }else{
-       $('#credit-card').find('.error-span').hide();
-       $('#zip').removeClass('error-border');
-    }
 
-    if(!checkIfNum($('#cvv')) || $cvv.length !== 3) {
-    // console.log('no valid CVV');
-       $('#credit-card').find('.error-span').show();
-       $('#cvv').addClass('error-border');
-    }else{
-       $('#credit-card').find('.error-span').hide();
-       $('#cvv').removeClass('error-border');
-    }
+       if(!$error_span_zip.html().includes('- enter a zip code.')) {
+         $error_span_zip.append('- enter a zip code.');
+        }
+
+    }else{ // *
+      $error_span_zip.html($error_span_zip.html().replace('- enter a zip code.', ''));
+      $('#zip').addClass('error-border');
+
+      if(!checkIfNum($('#zip'))) {
+         $error_span_zip.show().html('');
+
+         if(!$error_span_zip.html().includes('- zip code can only contain numbers.')) {
+            $error_span_zip.append('- zip code can only contain numbers.');
+             $('#zip').addClass('error-border');
+
+         }
+      }else{
+         $error_span_zip.html($error_span_zip.html().replace('- zip code can only contain numbers.', ''));
+         $('#zip').addClass('error-border');
+
+         if ($card_zip.length !== 6) {
+            $error_span_zip.show().html('');
+
+            if(!$error_span_zip.html().includes('- zip code is a number of 6 digits.')) {
+               $error_span_zip.append('- zip code is a number of 6 digits.');
+
+            }
+         }else{
+            $error_span_zip.html($error_span_zip.html().replace('- zip code is a number of 6 digits.', ''));
+            $('#zip').removeClass('error-border');
+            $error_span_zip.hide();
+         }
+
+      }
+    } // end of first else *
 
 
 
-  }
+
+
+
+
+
+      // some conditional errors for the cvv number field
+        if($cvv === '') {
+          // this sets the default error when the input is just empy
+           $error_span_cvv.show().html('');
+           $('#cvv').addClass('error-border');
+
+           if(!$error_span_cvv.html().includes('- enter a CVV number.')) {
+             $error_span_cvv.append('- enter a CVV number.');
+            }
+
+        }else{ // *
+          $error_span_cvv.html($error_span_cvv.html().replace('- enter a CVV number.', ''));
+          $('#cvv').addClass('error-border');
+
+          if(!checkIfNum($('#cvv'))) {
+             $error_span_cvv.show().html('');
+
+             if(!$error_span_cvv.html().includes('- CVV code can only contain numbers.')) {
+                $error_span_cvv.append('- CVV code can only contain numbers.');
+                 $('#cvv').addClass('error-border');
+
+             }
+          }else{
+             $error_span_cvv.html($error_span_cvv.html().replace('- CVV code can only contain numbers.', ''));
+             $('#cvv').addClass('error-border');
+
+             if ($cvv.length !== 3) {
+                $error_span_cvv.show().html('');
+
+                if(!$error_span_cvv.html().includes('- CVV code is a number of 3 digits.')) {
+                   $error_span_cvv.append('- CVV code is a number of 3 digits.');
+
+                }
+             }else{
+                $error_span_cvv.html($error_span_cvv.html().replace('- CVV code is a number of 3 digits.', ''));
+                $('#cvv').removeClass('error-border');
+                $error_span_cvv.hide();
+             }
+
+          }
+        } // end of first else *
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 
 });  // end of click event
