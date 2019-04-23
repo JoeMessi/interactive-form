@@ -405,23 +405,23 @@ $('button').on('click', function(e) {
 
   // calling 'appendError' for the card number input
     appendError( $('#cc-num'), $error_span_num,
-                 '- enter a credit card number.',
-                 '- card number can only contain numbers.',
-                 '- enter a number that is between 13 and 16 digits long.',
+                 'enter a credit card number.',
+                 'card number can only contain numbers.',
+                 'enter a number that is between 13 and 16 digits long.',
                  ($card_num.length >= 13 && $card_num.length <= 16) );
 
   // calling 'appendError' for the zip code input
     appendError( $('#zip'), $error_span_zip,
-                 '- enter a zip code.',
-                 '- zip code can only contain numbers.',
-                 '- zip code is a number of 6 digits.',
+                 'enter a zip code.',
+                 'zip code can only contain numbers.',
+                 'zip code is a number of 6 digits.',
                  ($card_zip.length === 6) );
 
   // calling 'appendError' for the CVV input
     appendError( $('#cvv'), $error_span_cvv,
-                 '- enter a CVV number.',
-                 '- CVV code can only contain numbers.',
-                 '- CVV code is a number of 3 digits.',
+                 'enter a CVV number.',
+                 'CVV code can only contain numbers.',
+                 'CVV code is a number of 3 digits.',
                  ($cvv.length === 3) );
   }
 });
@@ -463,9 +463,9 @@ $('#mail').keyup(function() {
     const $error_span_num = $('#credit-card').find('#error-card-num');
 
     appendError( $('#cc-num'), $error_span_num,
-                 '- enter a credit card number.',
-                 '- card number can only contain numbers.',
-                 '- enter a number that is between 13 and 16 digits long.',
+                 'enter a credit card number.',
+                 'card number can only contain numbers.',
+                 'card number is a number between 13 and 16 digits long.',
                  ($card_num.length >= 13 && $card_num.length <= 16) );
   });
 
@@ -481,9 +481,9 @@ $('#mail').keyup(function() {
     const $error_span_zip = $('#credit-card').find('#error-card-zip');
 
     appendError( $('#zip'), $error_span_zip,
-                '- enter a zip code.',
-                '- zip code can only contain numbers.',
-                '- zip code is a number of 6 digits.',
+                'enter a zip code.',
+                'zip code can only contain numbers.',
+                'zip code is a number of 6 digits.',
                 ($card_zip.length === 6) );
   });
 
@@ -499,9 +499,9 @@ $('#mail').keyup(function() {
     const $error_span_cvv = $('#credit-card').find('#error-card-cvv');
 
     appendError( $('#cvv'), $error_span_cvv,
-                '- enter a CVV number.',
-                '- CVV code can only contain numbers.',
-                '- CVV code is a number of 3 digits.',
+                'enter a CVV number.',
+                'CVV code can only contain numbers.',
+                'CVV code is a number of 3 digits.',
                 ($cvv.length === 3) );
   });
 
