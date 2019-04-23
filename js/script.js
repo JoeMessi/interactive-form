@@ -201,8 +201,8 @@ $('.activities').on('click', 'input', function(event) {
     checked_boxes = false;
   }
 
-// the following if/else statement shows and hides an error message
-// at least one input must be checked, 'checked_boxes' holds a boolian value
+// the following if/else statement checks if at least one input is checked
+// if not it shows an error message, 'checked_boxes' holds a boolian value
   if(!checked_boxes) {
      $('.activities').find('.error-span').show();
   }else{
@@ -354,7 +354,7 @@ const appendError = (input, error_span, error1, error2, error3, last_condition )
 // depending on the outcome we append errors to the page
 
 $('button').on('click', function(e) {
-   e.preventDefault();
+  // e.preventDefault();
 
 
 // NAME ( the input can't be empy )
@@ -362,6 +362,7 @@ $('button').on('click', function(e) {
 
     $('#name').next().show();
     $('#name').addClass('error-border');
+    e.preventDefault();
   }else{
     $('#name').next().hide();
     $('#name').removeClass('error-border');
@@ -375,6 +376,7 @@ $('button').on('click', function(e) {
 
     $('#mail').next().show();
     $('#mail').addClass('error-border');
+    e.preventDefault();
   }else{
     $('#mail').next().hide();
     $('#mail').removeClass('error-border');
@@ -384,6 +386,7 @@ $('button').on('click', function(e) {
 // ACTIVITY CHECKBOXES ( at least one input must be checked, 'checked_boxes' holds a boolian value )
   if(!checked_boxes) {
      $('.activities').find('.error-span').show();
+     e.preventDefault();
   }else{
      $('.activities').find('.error-span').hide();
   }
@@ -442,17 +445,17 @@ $('button').on('click', function(e) {
 // 'click' event listener.
 
 
-// keyup validation for the name input (but it needs some work)
-// $('#name').keyup(function() {
-//   if($('#name').val() === '') {
-//
-//     $('#name').next().show();
-//     $('#name').addClass('error-border');
-//   }else{
-//     $('#name').next().hide();
-//     $('#name').removeClass('error-border');
-//   }
-// });
+// keyup validation for the name input
+  $('#name').keyup(function() {
+    if($('#name').val() === '') {
+
+      $('#name').next().show();
+      $('#name').addClass('error-border');
+    }else{
+      $('#name').next().hide();
+      $('#name').removeClass('error-border');
+    }
+});
 
 
 // keyup validation for the email input
@@ -468,6 +471,7 @@ $('#mail').keyup(function() {
     $('#mail').removeClass('error-border');
   }
 });
+
 
 
 // keyup validation for the card number input
