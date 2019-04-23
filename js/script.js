@@ -1,12 +1,45 @@
 
+// let's wrap everything inside the document.ready
 $(document).ready(() => {
 
-// give focus to the name text field
+// variable that will hold a boolian value (true = we have at least 1 activity checked)
+let checked_boxes;
+
+// I select 4 inputs inside the fieldset '.activities'
+// which I will pass as arguments for the 'checkbox_relation' function.
+const $js_frameworks = $(".activities input[name='js-frameworks']");
+const $express = $(".activities input[name='express']");
+const $js_libs = $(".activities input[name='js-libs']");
+const $node = $(".activities input[name='node']");
+
+// this will be an array of objects which will be used to pair up
+// all input checkboxes with their equivalent activity price
+const arr_obj_prices = [];
+
+
+// gives focus to the name text field
   $('#name').focus();
+
+
+/*** JOB ROLE SECTION ***/
 
 // hides the text field that should appear when the 'Other' option
 // is selected in the 'Job Role' dropdown menu
   $('#other-title').hide();
+
+// this will show the text field only when 'other' is
+// selected from the 'job role' drop down menu.
+  $('#title').change(function() {
+
+    if($('#title').val() === 'other') {
+      $('#other-title').show();
+    }else{
+      $('#other-title').hide();
+    }
+  });
+
+
+/*** T-SHIRT INFO SECTION ***/
 
 // I split the options of the select element '#color' into 2 arrays.
 // first I assign a class name to each option in index.html, then
@@ -35,41 +68,30 @@ $(document).ready(() => {
   $('#design').change(function(){
 
     if($(this).val() === 'js puns') {
+    // let's show the div '#colors-js-puns' which is supposed to be hidden
+    // until a design is selected from the 'design' drop down menu.
        $('#colors-js-puns').show();
+
        $("#color").children().remove();
        $("#color").append(js_puns);
        $('#color').val(js_puns[0].val());
     }
     else if($(this).val() === 'heart js') {
+    // let's show the div '#colors-js-puns' which is supposed to be hidden
+    // until a design is selected from the 'design' drop down menu.
         $('#colors-js-puns').show();
+
         $("#color").children().remove();
         $("#color").append(heart_js);
         $('#color').val(heart_js[0].val());
     }
     else{
-   // ( the commented lines used to concat and show all colors, probably no need for that anoymore )
-        // $("#color").children().remove();
-        // const allColors = js_puns.concat(heart_js);
-        // $("#color").append(allColors);
-        // $('#color').val(allColors[0].val());
         $('#colors-js-puns').hide();
     }
   });
 
 
-// ( PROBABLY BRING THOSE VARIABLES UP LATER )
-
-// variable that will hold a boolian value (true = we have at least 1 activity checked)
-let checked_boxes;
-
-// I select 4 inputs inside the fieldset '.activities'
-// which I will pass as arguments for the 'checkbox_relation' function.
-const $js_frameworks = $(".activities input[name='js-frameworks']");
-const $express = $(".activities input[name='express']");
-
-const $js_libs = $(".activities input[name='js-libs']");
-const $node = $(".activities input[name='node']");
-
+/*** REGISTER FOR ACTIVITIES SECTION ***/
 
 // The 'checkbox_relation' function deals with the relation of 2 activites that happen
 // at the same day and time inside the fieldset '.activities'.
@@ -77,6 +99,7 @@ const $node = $(".activities input[name='node']");
 // gets disabled and vice versa.
 const checkbox_relation = (checkbx1, checkbx2) => {
 // first if statement enables both if one of them is unchecked
+// the 'disabled' class changes the opacity of the label the inputs are in
    if(!checkbx1.prop('checked') || !checkbx2.prop('checked')) {
       checkbx1.prop('disabled', false);
       checkbx1.parent().removeClass('disabled');
@@ -94,21 +117,27 @@ const checkbox_relation = (checkbx1, checkbx2) => {
 }
 
 /*****
-I pair up all input checkboxes with their equivalent activity price by dinamically create an array of object.
+I pair up all input checkboxes with their equivalent activity price by dinamically create an array of objects.
 each object in the array will have the following format:
 
    name: the value of the name attribute of the specific input,
    price: the price of the activity
 
-I loop through all the label elements inside '.activities' and for every loop
+I loop through all the label elements inside '.activities' and for each loop
 an object is created and pushed to the 'arr_obj_prices' array
 *****/
-const arr_obj_prices = [];
 
 $('.activities label').each(function(){
    const obj = {};
 
+// '$name' holds the value of the input name attribute
    const $name = $(this).children(':first').attr('name');
+
+// I get the price of the activity from the actual string of the label.
+//   1) select the string
+//   2) split the string into an array of words
+//   3) I push the last word (which is our activity price) into a new array
+//   4) I remove the $ sign from it
 
    const $label_text = $(this).text();
    const $text_in_words = $label_text.split(' ');
@@ -123,7 +152,7 @@ $('.activities label').each(function(){
 });
 
 
-// I set a 'click' event listener on the fieldset '.activities'
+// now we set a 'click' event listener on the fieldset '.activities'
 $('.activities').on('click', 'input', function(event) {
 
 // we call the 'checkbox_relation' function passing as arguments the 2 pairs
@@ -161,7 +190,7 @@ $('.activities').on('click', 'input', function(event) {
   })
 
 // after the looping, in a conditional statement we append and/or remove to the page
-// the 'total' variable which represents the total price of all the activites that the user checked.
+// the 'total' variable which represents the total price of all the activites that the user has checked.
 
   if(total !== 0) {
     $('#total').remove();
@@ -174,19 +203,20 @@ $('.activities').on('click', 'input', function(event) {
 });
 
 
-/***** PAYMENT INFO SECTION *****/
+/*** PAYMENT INFO SECTION ***/
 
 // I set the default view of the payment info section
-// by hiding and showing elements that represent different payment methods
+// by hiding and showing elements that contain the different payment methods
 $('#payment').val('credit card');
 
 $('#credit-card').show();
 $('#paypal').hide();
 $('#bitcoin').hide();
+// this one disables the 'select payment method' option from the drop down menu
 $("#payment option[value='select_method']").attr('disabled', true);
 
 // the 'change' method on '#payment' allow me to listen for any changes in value of the select element.
-// I dispay and/or hide the divs containing the different payment info depending on the selected payment option.
+// I display and/or hide the divs containing the different payment info depending on the selected payment option.
 $('#payment').change(function() {
 
   if($('#payment').val() === 'credit card') {
@@ -194,8 +224,7 @@ $('#payment').change(function() {
      $('#paypal').hide();
      $('#bitcoin').hide();
 
-  // the following remove any error messages if any
-     $('#credit-card').find('#error-card').hide();
+  // the following remove any error messages if any appended on the page
      $('#credit-card').find('#error-card-num').hide();
      $('#credit-card').find('#error-card-zip').hide();
      $('#credit-card').find('#error-card-cvv').hide();
@@ -220,15 +249,13 @@ $('#payment').change(function() {
 });
 
 
-
 // this function checks if the value of an element contains only numbers.
 // we will use this function to check if the user has typed only numbers in
-// the card number and zip code fields when registering using the credit card payment option.
+// the card number, zip code and CVV fields when registering using the credit card payment option.
 const checkIfNum = (element) => {
   const element_value = element.val();
   return /^\d+$/.test(element_value);
 }
-
 
 
 // the 'appendError' function append 'error' spans to the page depending on some conditions
@@ -236,12 +263,11 @@ const checkIfNum = (element) => {
 // since the validation I was testing is almost identical for all 3 inputs I thought I'd write
 // a function to shorten the code.
 
-// it takes 7 parameters ( I know it's not ideal to have that many parameters,
+// it takes 6 parameters ( I know it's not ideal to have that many parameters,
 // but creating this function made the code 60 lines shorter  )
 
 // the parameters are:
    // - the actual input element
-   // - the value of the input
    // - the error span related to that specific input ( which is created in the html)
    // - a first error string
    // - a second error string
@@ -258,7 +284,10 @@ const checkIfNum = (element) => {
 
 // and depending on the condition we append different strings to the page.
 
-const appendError = (input, input_value, error_span, error1, error2, error3, last_condition ) => {
+const appendError = (input, error_span, error1, error2, error3, last_condition ) => {
+
+ // hold the value of the input field
+  const input_value = input.val();
 
  // we first test if the input is empty
   if(input_value === '') {
@@ -312,49 +341,17 @@ const appendError = (input, input_value, error_span, error1, error2, error3, las
 }
 
 
-//***************************************************************************
+// inside a 'click' event listener on the 'register' button
+// we test and run validations for the inputs in our form
+// depending on the outcome we append errors to the page
 
-/****** adding some keyup event listeners *******/
-
-// email
-$('#mail').keyup(function() {
-
-  const email_input = /^[^@]+@[^@.]+\.[a-z]+$/i.test($('#mail').val());
-
-  if(!email_input) {
-  //   console.log('email not good');
-    $('#mail').next().show();
-    $('#mail').addClass('error-border');
-  }else{
-      $('#mail').next().hide();
-      $('#mail').removeClass('error-border');
-  }
-});
-
-
-// card number
-
-// $('#cc-num').keyup(function() {
-//
-//   appendError( $('#cc-num'), $card_num, $error_span_num,
-//                '- enter a credit card number.',
-//                '- card number can only contain numbers.',
-//                '- enter a number that is between 13 and 16 digits long.',
-//                ($card_num.length >= 13 && $card_num.length <= 16) );
-// });
-
-
-
-//***************************************************************************
-
-
-// click event listener on the 'register' button
 $('button').on('click', function(e) {
    e.preventDefault();
 
-// name  ( I WANT TO MAKE THE ERROR GONE WHEN USER START TYPING BACK )
+
+// NAME ( the input can't be empy )
   if($('#name').val() === '') {
-  //  console.log('name field is empty');
+
     $('#name').next().show();
     $('#name').addClass('error-border');
   }else{
@@ -362,11 +359,12 @@ $('button').on('click', function(e) {
       $('#name').removeClass('error-border');
   }
 
-// email
-  const email_input = /^[^@]+@[^@.]+\.[a-z]+$/i.test($('#mail').val());
+
+// EMAIL ( we test the input value using a regular expression )
+  const email_input = /^[^@\s]+@[^@.\s]+\.[a-z\S]+$/.test($('#mail').val());
 
   if(!email_input) {
-  //   console.log('email not good');
+
     $('#mail').next().show();
     $('#mail').addClass('error-border');
   }else{
@@ -374,99 +372,137 @@ $('button').on('click', function(e) {
       $('#mail').removeClass('error-border');
   }
 
-// checkbox
+
+// ACTIVITY CHECKBOXES ( at least one input must be checked, 'checked_boxes' holds a boolian value )
   if(!checked_boxes) {
-//     console.log('check at least one activity');
+
      $('.activities').find('.error-span').show();
   }else{
      $('.activities').find('.error-span').hide();
   }
 
-// credit card payment
+
+// CREDIT CARD PAYMENT
+// for the credit card inputs (card number, zip code and CVV) we'll call
+// the 'appendError' function passing the relevant arguments for each of the 3 inputs.
+
   if($('#payment').val() === 'credit card') {
 
-    // holds the value of the card number input field
+  // holds the value of the card number input field
     const $card_num = $('#cc-num').val();
-    // holds the value of the zip code input field
+  // holds the value of the zip code input field
     const $card_zip = $('#zip').val();
-    // holds the value of the CVV input field
+  // holds the value of the CVV input field
     const $cvv = $('#cvv').val();
 
-    // selects the generic error
-    const $error_span = $('#credit-card').find('#error-card');
-    // selects the credit card number error span we'll show and hide in the page
+  // selects the credit card number error span we'll show and hide in the page
     const $error_span_num = $('#credit-card').find('#error-card-num');
-    // selects the zip code error span we'll show and hide in the page
+  // selects the zip code error span we'll show and hide in the page
     const $error_span_zip = $('#credit-card').find('#error-card-zip');
-    // selects the cvv error span we'll show and hide in the page
+  // selects the cvv error span we'll show and hide in the page
     const $error_span_cvv = $('#credit-card').find('#error-card-cvv');
 
 
-
-    // the 'checkIfNum' function is called as the first condition of the following if statements.
-    // we pass the relevant input element as argument to check if the user has typed only numbers in the field.
-
-    // if any of this conditions the error message is shown
-    if( (!checkIfNum($('#cc-num')) || !($card_num.length >= 13 && $card_num.length <= 16)) ||
-        (!checkIfNum($('#zip')) || $card_zip.length !== 6) ||
-        (!checkIfNum($('#cvv')) || $cvv.length !== 3) ) {
-
-        $error_span.show();
-    }else {
-        $error_span.hide();
-    }
-
-//--------------------------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------------------------
-
-    // now we call our 'appendError' function passing the relevant arguments
-    // for each of the 3 input fields inside the credit card section (card number, zip code and CVV)
-
-    appendError( $('#cc-num'), $card_num, $error_span_num,
+  // calling 'appendError' for the card number input
+    appendError( $('#cc-num'), $error_span_num,
                  '- enter a credit card number.',
                  '- card number can only contain numbers.',
                  '- enter a number that is between 13 and 16 digits long.',
                  ($card_num.length >= 13 && $card_num.length <= 16) );
 
-
-    appendError( $('#zip'), $card_zip, $error_span_zip,
+  // calling 'appendError' for the zip code input
+    appendError( $('#zip'), $error_span_zip,
                  '- enter a zip code.',
                  '- zip code can only contain numbers.',
                  '- zip code is a number of 6 digits.',
                  ($card_zip.length === 6) );
 
-
-    appendError( $('#cvv'), $cvv, $error_span_cvv,
+  // calling 'appendError' for the CVV input
+    appendError( $('#cvv'), $error_span_cvv,
                  '- enter a CVV number.',
                  '- CVV code can only contain numbers.',
                  '- CVV code is a number of 3 digits.',
                  ($cvv.length === 3) );
-
-
-
-  }  // if($('#payment').val() === 'credit card')
-
-});  // end of click event
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  }
 });
 
 
-// end of everything -------------------------------------------------- test following ---- :::::
+// until here we run our validations only when the user has clicked the button of our form.
+// now, additionally, we run some validations inside a 'keyup' event listener
+// this will provide the user with an instant feedback about what he/she is typing.
+
+// the code used to validate each input remains the same as the ones inside the
+// 'click' event listener.
+
+
+// keyup validation for the email input
+$('#mail').keyup(function() {
+
+  const email_input = /^[^@\s]+@[^@.\s]+\.[a-z\S]+$/.test($('#mail').val());
+
+  if(!email_input) {
+    $('#mail').next().show();
+    $('#mail').addClass('error-border');
+  }else{
+      $('#mail').next().hide();
+      $('#mail').removeClass('error-border');
+  }
+});
+
+
+// keyup validation for the card number input
+  $('#cc-num').keyup(function() {
+
+    // holds the value of the card number input field
+    const $card_num = $('#cc-num').val();
+
+    // selects the generic error
+    // const $error_span = $('#credit-card').find('#error-card');
+
+    // selects the credit card number error span we'll show and hide in the page
+    const $error_span_num = $('#credit-card').find('#error-card-num');
+
+    appendError( $('#cc-num'), $error_span_num,
+                 '- enter a credit card number.',
+                 '- card number can only contain numbers.',
+                 '- enter a number that is between 13 and 16 digits long.',
+                 ($card_num.length >= 13 && $card_num.length <= 16) );
+  });
+
+
+
+// keyup validation for the zip code input
+  $('#zip').keyup(function() {
+
+    // holds the value of the zip code input field
+    const $card_zip = $('#zip').val();
+
+    // selects the zip code error span we'll show and hide in the page
+    const $error_span_zip = $('#credit-card').find('#error-card-zip');
+
+    appendError( $('#zip'), $error_span_zip,
+                '- enter a zip code.',
+                '- zip code can only contain numbers.',
+                '- zip code is a number of 6 digits.',
+                ($card_zip.length === 6) );
+  });
+
+
+
+// keyup validation for the CVV input
+  $('#cvv').keyup(function() {
+
+    // holds the value of the CVV input field
+    const $cvv = $('#cvv').val();
+
+    // selects the cvv error span we'll show and hide in the page
+    const $error_span_cvv = $('#credit-card').find('#error-card-cvv');
+
+    appendError( $('#cvv'), $error_span_cvv,
+                '- enter a CVV number.',
+                '- CVV code can only contain numbers.',
+                '- CVV code is a number of 3 digits.',
+                ($cvv.length === 3) );
+  });
+
+});

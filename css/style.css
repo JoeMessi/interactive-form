@@ -15,7 +15,7 @@ button {
 body {
   font: 1em/1.5;
   color: #109177;
-	background: #2c7492;
+	background: #106c77;
 }
 
 header {
@@ -77,6 +77,7 @@ label {
 	color: #000;
 	display: block;
 	margin-bottom: .5em;
+  margin-top: 0.5em;
 }
 
 input,
@@ -119,7 +120,7 @@ button:hover {
 	background: #16a085;
 }
 
-/* MY CSS  */
+/* css I added  */
 
 #other-title {
   margin-top: 12px;
@@ -142,21 +143,19 @@ button:hover {
   padding: 7px 10px;
   color: #fff;
 }
-/* the following is the arrow in the error message */
-/* .error-span:after {
-  right: 100%;
-  top: 50%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none;
-  border-color: rgba(136, 183, 213, 0);
-  border-right-color: #b51d1d;
-  border-width: 8px;
-  margin-top: -8px;
-} */
+
+.error-span-cc {
+    border-radius: 5px;
+    display: none;
+    font-size: 0.8em;
+    text-align: center;
+    background: #b51d1d;
+    width: 160px;
+    padding: 7px 10px;
+    color: #fff;
+    float: left;
+    clear: left;
+}
 
 .error-border {
   border: 1px solid #b51d1d;
@@ -175,19 +174,6 @@ div {
   left: 103%;
 }
 
-.error-span-cc {
-    border-radius: 5px;
-    display: none;
-    font-size: 0.8em;
-    text-align: center;
-    background: #b51d1d;
-    width: 160px;
-    padding: 7px 10px;
-    color: #fff;
-    float: left;
-    clear: left;
-}
-
 #error-card {
   background-color: #FF5722;
 }
@@ -195,8 +181,6 @@ div {
 #error-card-num, #error-card-zip, #error-card-cvv {
   margin-top: 1px;
 }
-
-
 
 /* =================================
   Page Styles
