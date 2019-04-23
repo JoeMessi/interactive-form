@@ -200,6 +200,14 @@ $('.activities').on('click', 'input', function(event) {
     $('#total').remove();
     checked_boxes = false;
   }
+
+// the following if/else statement shows and hides an error message
+// at least one input must be checked, 'checked_boxes' holds a boolian value
+  if(!checked_boxes) {
+     $('.activities').find('.error-span').show();
+  }else{
+     $('.activities').find('.error-span').hide();
+  }
 });
 
 
@@ -355,8 +363,8 @@ $('button').on('click', function(e) {
     $('#name').next().show();
     $('#name').addClass('error-border');
   }else{
-      $('#name').next().hide();
-      $('#name').removeClass('error-border');
+    $('#name').next().hide();
+    $('#name').removeClass('error-border');
   }
 
 
@@ -368,14 +376,13 @@ $('button').on('click', function(e) {
     $('#mail').next().show();
     $('#mail').addClass('error-border');
   }else{
-      $('#mail').next().hide();
-      $('#mail').removeClass('error-border');
+    $('#mail').next().hide();
+    $('#mail').removeClass('error-border');
   }
 
 
 // ACTIVITY CHECKBOXES ( at least one input must be checked, 'checked_boxes' holds a boolian value )
   if(!checked_boxes) {
-
      $('.activities').find('.error-span').show();
   }else{
      $('.activities').find('.error-span').hide();
@@ -435,6 +442,19 @@ $('button').on('click', function(e) {
 // 'click' event listener.
 
 
+// keyup validation for the name input (but it needs some work)
+// $('#name').keyup(function() {
+//   if($('#name').val() === '') {
+//
+//     $('#name').next().show();
+//     $('#name').addClass('error-border');
+//   }else{
+//     $('#name').next().hide();
+//     $('#name').removeClass('error-border');
+//   }
+// });
+
+
 // keyup validation for the email input
 $('#mail').keyup(function() {
 
@@ -444,8 +464,8 @@ $('#mail').keyup(function() {
     $('#mail').next().show();
     $('#mail').addClass('error-border');
   }else{
-      $('#mail').next().hide();
-      $('#mail').removeClass('error-border');
+    $('#mail').next().hide();
+    $('#mail').removeClass('error-border');
   }
 });
 
