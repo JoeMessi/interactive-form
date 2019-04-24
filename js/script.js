@@ -280,7 +280,7 @@ const checkIfNum = (element) => {
    // - a first error string
    // - a second error string
    // - a third error string
-   // - and finaly an additional condition, which I pass as an argument since it will be different for each inputs.
+   // - an finally an additional condition, which I pass as an argument since it will be different for each inputs.
    //   an example of what it will be tested in this final condition is:
    //    - if the number is between 13 and 16 digits long
    //    - or if the number is a exactly a certain numbers of digits long.
@@ -307,6 +307,8 @@ const appendError = (input, error_span, error1, error2, error3, last_condition )
   // if the span does NOT include our first error string we append it to it
      if(!error_span.html().includes(error1)) {
        error_span.append(error1);
+  // we prevent the default of the submitting form
+       event.preventDefault();
      }
 
   }else{
@@ -321,6 +323,8 @@ const appendError = (input, error_span, error1, error2, error3, last_condition )
   // if the span does NOT include our second error string we append it to it
        if(!error_span.html().includes(error2)) {
           error_span.append(error2);
+  // we prevent the default of the submitting form
+          event.preventDefault();
        }
 
      }else{
@@ -337,6 +341,8 @@ const appendError = (input, error_span, error1, error2, error3, last_condition )
   // if the span does NOT include our third error string we append it to it
           if(!error_span.html().includes(error3)) {
             error_span.append(error3);
+  // we prevent the default of the submitting form
+            event.preventDefault();
            }
 
          }else{
@@ -353,16 +359,14 @@ const appendError = (input, error_span, error1, error2, error3, last_condition )
 // we test and run validations for the inputs in our form
 // depending on the outcome we append errors to the page
 
-$('button').on('click', function(e) {
-  // e.preventDefault();
-
+$('button').on('click', function(event) {
 
 // NAME ( the input can't be empy )
   if($('#name').val() === '') {
 
     $('#name').next().show();
     $('#name').addClass('error-border');
-    e.preventDefault();
+    event.preventDefault();
   }else{
     $('#name').next().hide();
     $('#name').removeClass('error-border');
@@ -376,7 +380,7 @@ $('button').on('click', function(e) {
 
     $('#mail').next().show();
     $('#mail').addClass('error-border');
-    e.preventDefault();
+    event.preventDefault();
   }else{
     $('#mail').next().hide();
     $('#mail').removeClass('error-border');
@@ -386,7 +390,7 @@ $('button').on('click', function(e) {
 // ACTIVITY CHECKBOXES ( at least one input must be checked, 'checked_boxes' holds a boolian value )
   if(!checked_boxes) {
      $('.activities').find('.error-span').show();
-     e.preventDefault();
+     event.preventDefault();
   }else{
      $('.activities').find('.error-span').hide();
   }
@@ -424,8 +428,8 @@ $('button').on('click', function(e) {
     appendError( $('#zip'), $error_span_zip,
                  'enter a zip code.',
                  'zip code can only contain numbers.',
-                 'zip code is a number of 6 digits.',
-                 ($card_zip.length === 6) );
+                 'zip code is a number of 5 digits.',
+                 ($card_zip.length === 5) );
 
   // calling 'appendError' for the CVV input
     appendError( $('#cvv'), $error_span_cvv,
@@ -507,8 +511,8 @@ $('#mail').keyup(function() {
     appendError( $('#zip'), $error_span_zip,
                 'enter a zip code.',
                 'zip code can only contain numbers.',
-                'zip code is a number of 6 digits.',
-                ($card_zip.length === 6) );
+                'zip code is a number of 5 digits.',
+                ($card_zip.length === 5) );
   });
 
 
